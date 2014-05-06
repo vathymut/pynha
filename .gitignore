@@ -1,0 +1,8 @@
+# Ignore config files
+*.pyc
+*.txt
+
+# Ignore folders
+
+# New folder for Version: v1, v2, v3, etc
+
