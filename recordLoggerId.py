@@ -45,13 +45,6 @@ def write_successes_to_csv(  dir_to_log, content, result_type = 'rates' ):
     filename = result_type + '.csv'
     filename_fullpath = join( HOMEDIR, result_type, dir_to_log, filename )
     file_exists = exists( filename_fullpath )
-    if not file_exists:
-        directory = join( HOMEDIR, result_type, dir_to_log )
-        is_dir_created = create_dir( directory )
-        if is_dir_created:
-            print 'Created directory: %s' % directory
-        else:
-            raise IOError( 'Did not create directory: %s' ) % directory
     with open( filename_fullpath, 'ab+' ) as f:
         f_csv = csv.writer( f )
         if not file_exists:
@@ -208,5 +201,4 @@ def get_stats_from_loggers( issuers_list, logging_folder = 'logging_rates' ):
 if __name__ == '__main__' :
     # Include tests here if needed
     print 'Leave blank for now'
-    print 'The home directory in this computer is:', HOMEDIR
 

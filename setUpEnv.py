@@ -11,11 +11,6 @@ from stdDataFunc import get_csvrows, partial_with_wrapper
 from recordLoggerId import log_exceptions, write_successes_to_csv, create_log_folders, \
                         get_stats_from_loggers, write_summ_loggers_to_csv, delete_log_files
 
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
-HOMEDIR = dirname( dirname( abspath( __file__ ) ) )
-# pynha Directory - On RZ machine: 'B:\\nha_mbs\\pynha'
-PYNHADIR = dirname( abspath( __file__ ) )
-
 def gen_cutoff( func_custom, cutoff_list = None ):
     '''
     Yields function func_custom with default argument
@@ -158,11 +153,9 @@ def process_csv_files( set_up_env, \
 __all__ = [ 'wrap_set_up_env', 'process_csv_files' ]
 
 if __name__ == '__main__' :
-    from listOfCutoffCoord import RATE_CUTOFFS
-    from makeInsAmountExposed import custom_ins_amounts, get_ins_amounts
+    from makeInsAmountExposed import get_ins_amounts
     from os import getcwd
     # test wrap_set_up_env
-    HEADERS_CSV = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
     args_dict = dict( cutoff_list = None, refcoord_list = None, \
                     result_type = 'ins_amounts', logging_dir = 'logging_insnha_inspriv', \
                     func_custom = get_ins_amounts, from_dir = 'csv_raw' )
