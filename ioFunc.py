@@ -58,7 +58,7 @@ def create_issuer_dir( filename, prefix_path = 'pdf_downloaded' , debug_print = 
 	Return the existing or newly created directory for the issuer.
 	'''
 	issuer, _ = splitext( filename )
-	new_issuer_dir = join( prefix_path, issuer )
+	new_issuer_dir = join( HOMEDIR, prefix_path, issuer )
 	is_created = create_dir( new_issuer_dir )
 	if debug_print:
 		if is_created:
@@ -74,7 +74,7 @@ def gen_issuer_names( skip_list = None ):
 	'''
     CURRDIR = getcwd( )
     try:
-        chdir( HOMEDIR )
+        chdir( r'B:\pynha_scraper' )
         issuers_filenames = glob( '*.txt' )
         for filename in issuers_filenames:
 			issuer, _ = splitext( filename )
@@ -249,7 +249,3 @@ def get_files_to_process( to_dir, \
 if __name__ == '__main__' :
 	# Include tests here if needed
     print 'Leave blank for now'
-    set_globals_dir( )
-    print 'The home directory in this computer is:', HOMEDIR
-    print 'The project directory in this computer is:', PYNHADIR
-    chdir( PYNHADIR )
