@@ -4,7 +4,7 @@
 """
 
 from __future__ import division
-from ioFunc import gen_issuer_names, create_issuer_dir, safe_delete
+from ioFunc import gen_issuer_names, create_issuer_dir, safe_delete, create_dir
 from contextlib import contextmanager
 from os import walk, remove, getcwd, chdir
 from os.path import dirname, abspath, join, exists
@@ -31,8 +31,8 @@ def write_failures_to_log( dir_to_log, content, logging_dir = 'logging_rates' ):
     dir_to_log is the issuer for which the information belongs.
     content is the info to write to csv.
     """
-    filename = join( HOMEDIR, logging_dir, dir_to_log, 'failure.txt' )
-    with open( filename, 'a+' ) as f:
+    filename_fullpath = join( HOMEDIR, logging_dir, dir_to_log, 'failure.txt' )
+    with open( filename_fullpath, 'a+' ) as f:
         f.write( content + '\n' )
 
 def write_successes_to_csv(  dir_to_log, content, result_type = 'rates' ):
@@ -45,10 +45,16 @@ def write_successes_to_csv(  dir_to_log, content, result_type = 'rates' ):
     filename = result_type + '.csv'
     filename_fullpath = join( HOMEDIR, result_type, dir_to_log, filename )
     file_exists = exists( filename_fullpath )
+    if not file_exists:
+        directory = join( HOMEDIR, result_type, dir_to_log )
+        is_dir_created = create_dir( directory )
+        if is_dir_created:
+            print 'Created directory: %s' % directory
+        else:
+            raise IOError( 'Did not create directory: %s' ) % directory
     with open( filename_fullpath, 'ab+' ) as f:
         f_csv = csv.writer( f )
         if not file_exists:
-            print 'Created: %s' % ( filename_fullpath )
             # Write the column headers.
             # content must be a namedtuple with attributes _fields.
             f_csv.writerow( content._fields )
