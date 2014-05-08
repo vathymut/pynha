@@ -10,11 +10,6 @@ from os.path import dirname, abspath, basename
 from os import chdir
 from setUpEnv import gen_refcoord_and_cutoff
 
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
-HOMEDIR = dirname( dirname( abspath( __file__ ) ) )
-# pynha Directory - On RZ machine: 'B:\\nha_mbs\\pynha'
-PYNHADIR = dirname( abspath( __file__ ) )
-
 # csv headers
 HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
 
@@ -42,21 +37,3 @@ def test_csv_file( csv_filename, func_apply, cutoff_list, \
             func( rows_list, csv_filename, absdist_tuple = absdist_tuple )
         except ( ValueError, TypeError ) as err:
             print err.message
-
-# Test a single file.
-if __name__ == '__main__':
-    from listOfCutoffCoord import DESC_CUTOFFS, PPL_AMOUNT_CUTOFFS, \
-                            DATE_DUE_CUTOFFS, DATE_ISSUE_CUTOFFS
-    from makeInsPrivAmount import custom_privamt
-    print 'Script:', __file__
-    print 'Testing function on a single file.'
-    csv_filename = r'B:\nha_mbs\csv_raw\ama_insurance\96415070-2013-11-29-10-26-09.csv'
-    print 'Filename:', basename( csv_filename )
-    test_csv_file( csv_filename = csv_filename, \
-                    func_apply = custom_privamt, \
-                    cutoff_list = DESC_CUTOFFS , \
-                    refcoord_list = None, \
-                    absdist_tuple = (-25.0, -25.0), \
-                    skip_rows_no = 0, \
-                    stop_row_no = 200 )
-    chdir( PYNHADIR )
