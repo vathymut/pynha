@@ -74,7 +74,8 @@ def gen_issuer_names( skip_list = None ):
 	'''
     CURRDIR = getcwd( )
     try:
-        chdir( r'B:\pynha_scraper' )
+        # CHANGE THIS TO RELATIVE PATH
+        chdir( r'B:\pynha_scraper' ) # Careful: It's hardcoded
         issuers_filenames = glob( '*.txt' )
         for filename in issuers_filenames:
 			issuer, _ = splitext( filename )
@@ -204,7 +205,8 @@ def skip_dir( to_dir, from_dir = 'csv_raw', keep_list = None ):
     Otherwise, only visit dir in keep_list.
     Returns file no., filename and issuer to be processed in to_dir.
 	'''
-    csvdir = join( HOMEDIR, from_dir )
+    # CHANGE THIS TO RELATIVE PATH
+    csvdir = join( r'B:\pynha_csv', from_dir ) # HOMEDIR here should be CSVDIR
     for fileno, filename, clean_dir in get_dir_and_fileinfo( from_dir = csvdir, to_dir = to_dir, first_ten = False ):
 		issuer = basename( clean_dir )
 		if keep_list is None:
@@ -240,7 +242,8 @@ def get_files_to_process( to_dir, \
 	Wrapper around the function skip_dir and skip_files.
 	'''
     logging_dir = join( HOMEDIR, logging_dir )
-    csvdir = join( HOMEDIR, from_dir )
+    # CHANGE THIS TO RELATIVE PATH
+    csvdir = join( r'B:\pynha_csv', from_dir ) # Careful: It's hardcoded
     skip_dir_gen = skip_dir( to_dir = to_dir, from_dir = csvdir, keep_list = keep_list )
     skip_files_gen = skip_files( skip_dir_gen, logging_dir = logging_dir )
     for file_no, csv_filename, issuer in skip_files_gen:

@@ -5,17 +5,18 @@ Created on Thu Jun 13 08:34:30 2013
 @author: Vathy M. Kamulete
 """
 
+import ioFunc
 from ioFunc import create_issuer_subdirs, writecsv_to_path, \
                 gen_issuer_names, gen_pdf_to_csv
 from os import chdir, getcwd
 from os.path import dirname, abspath, join
 from recordLoggerId import delete_csv_from_loggers, delete_log_files
 
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
-HOMEDIR = dirname( dirname( abspath( __file__ ) ) )
-PYNHADIR = dirname( abspath( __file__ ) )
-PDF_DIR = join( HOMEDIR, 'pdf_downloaded' )
-##CSV_DIR = join( HOMEDIR, 'csv_raw' )
+# Set global directories
+HOMEDIR = r'B:\pynha_csv'
+ioFunc.HOMEDIR = HOMEDIR
+PDF_DIR = join( r'B:\pynha_scraper', 'pdf_downloaded' )
+CSV_DIR = join( HOMEDIR, 'csv_raw' )
 CSV_DIR = join( HOMEDIR, 'csv_firstpage' )
 
 # CSV info
@@ -50,5 +51,4 @@ if __name__ == '__main__':
 			print '\tProblem with file: %s' % ( csv_file )
 			failed_files.append( csv_file )
         print 'in directory:' , getcwd()
-    chdir( PYNHADIR )
-    print failed_files
+    # print failed_files
