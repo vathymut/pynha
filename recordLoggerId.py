@@ -58,6 +58,7 @@ def write_summary_logs( summ_list, filepath ):
     Write summary logs to csv file.
     """
     COL_FIELDS = [ 'issuer', 'no_failed', 'no_succeeded', 'success_rate' ]
+    create_dir( dirname( filepath ) )
     with open( filepath, 'wb' ) as f:
         f_csv = csv.writer( f )
         f_csv.writerow( COL_FIELDS )
