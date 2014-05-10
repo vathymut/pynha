@@ -146,14 +146,14 @@ def delete_csv_from_loggers( issuers_list, logging_folder = 'logging_rates' ):
     if the file is in the failure log.
     """
     CURRDIR = getcwd( )
-    DIR_CSV_RAW = join( HOMEDIR, 'csv_raw' )
+    # CSVDIR should be: B:\pynha_csv\csv_raw or B:\pynha_csv\csv_firstpage
     try:
         for logpath, issuer in gen_loggers_path( issuers_list, logging_folder ):
             chdir( logpath )
             if not exists( 'failure.txt' ):
                 continue
             for csvpath in gen_csvfailed_path( ):
-                csv_fullpath = join( DIR_CSV_RAW, issuer, csvpath )
+                csv_fullpath = join( CSVDIR, issuer, csvpath )
                 safe_delete( csv_fullpath )
     finally:
         chdir( CURRDIR )
@@ -191,13 +191,13 @@ def get_stats_from_loggers( issuers_list, logging_folder = 'logging_rates' ):
     Call summ_issuer_logs for each issuer in issuers_list
     and returns stats from the logging_folder.
     """
-    RESULTS_LIST = list( )
+    results_list = list( )
     for logpath, issuer in gen_loggers_path( issuers_list, logging_folder ):
         chdir( logpath )
         failure_count, success_count, success_rate = summ_issuer_logs( )
         issuer_infolist = [ issuer, failure_count, success_count, success_rate ]
-        RESULTS_LIST.append( issuer_infolist )
-    return RESULTS_LIST
+        results_list.append( issuer_infolist )
+    return results_list
 
 if __name__ == '__main__' :
     # Include tests here if needed
