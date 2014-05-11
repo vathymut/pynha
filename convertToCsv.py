@@ -21,16 +21,13 @@ PDFDIR = join( MAINDIR, 'pynha_scraper', 'pdf_downloaded' )
 CSVDIR_RAW = join( HOMEDIR, 'csv_raw' )
 CSVDIR_FIRSTPAGE = join( HOMEDIR, 'csv_firstpage' )
 
-# CSV info
-HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
-PAGES_TO_PARSE = ( 0, 1 )
-
 # Create directory for each issuer in pynha_csv
 create_issuer_subdirs( main_dir = 'csv_raw', debug_print = False )
 create_issuer_subdirs( main_dir = 'csv_firstpage', debug_print = False )
 
 ## NUCLEAR OPTION TO DELETE ALL .CSV FILES IN in CSV_RAW. DO NOT USE ##
-## delete_log_files( pattern_str = '.csv', default_start_walk = CSVDIR_RAW )
+# delete_log_files( pattern_str = '.csv', default_start_walk = CSVDIR_RAW )
+# delete_log_files( pattern_str = '.csv', default_start_walk = CSVDIR_FIRSTPAGE )
 
 BIGSIX = [ 'rbc', 'rbc_dominion', 'bmo', 'cibc', 'desjardins', 'national_bank', \
 			'national_bank_financial', 'scotia_bank', 'td_bank', 'td_securities' ]
@@ -42,18 +39,38 @@ ISSUER_DIRS = list( gen_issuer_names( skip_list = None ) )
 ##ISSUER_DIRS = [ 'desjardins', 'home_trust', 'national_bank', 'scotia_bank' ]
 ##delete_csv_from_loggers( issuers_list = ISSUER_DIRS, logging_folder = 'logging_ppl_amount' )
 
+# CSV info
+HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
+PAGES_TO_PARSE_FIRSTPAGE = ( 0, 1, 2, 3 )
+PAGES_TO_PARSE_RAW = ( 5, 6, 7, 8 )
+
 if __name__ == '__main__':
+    ######### CSVDIR_FIRSTPAGE #########
+    chdir( PDFDIR )
+    failed_files = []
+    args = dict( pdf_dir = PDFDIR, csv_dir = CSVDIR_FIRSTPAGE, keep_issuers = ISSUER_DIRS )
+    for csv_file, pdf_file in gen_pdf_to_csv( **args ):
+        print csv_file, pdf_file
+        try:
+			writecsv_to_path( csv_file, pdf_file, HEADERS, PAGES_TO_PARSE_FIRSTPAGE )
+		# TO DO: Replace except Exception hack
+        except Exception, err:
+			print '\tProblem with file: %s' % ( csv_file )
+			failed_files.append( csv_file )
+        print 'in directory:' , getcwd( )
+    print failed_files
+    ######### CSVDIR_RAW #########
     chdir( PDFDIR )
     failed_files = []
     args = dict( pdf_dir = PDFDIR, csv_dir = CSVDIR_RAW, keep_issuers = ISSUER_DIRS )
     for csv_file, pdf_file in gen_pdf_to_csv( **args ):
         print csv_file, pdf_file
         try:
-			writecsv_to_path( csv_file, pdf_file, HEADERS, PAGES_TO_PARSE )
+			writecsv_to_path( csv_file, pdf_file, HEADERS, PAGES_TO_PARSE_RAW )
 		# TO DO: Replace except Exception hack
         except Exception, err:
 			print '\tProblem with file: %s' % ( csv_file )
 			failed_files.append( csv_file )
-        print 'in directory:' , getcwd()
+        print 'in directory:' , getcwd( )
     print failed_files
 
