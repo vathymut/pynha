@@ -87,6 +87,26 @@ INSURERS_TAG = re.compile(
                     genworth                    # Match GENWORTH
                     |
                     aig.*?insurance             # Match AIG Insurance
+                    |
+                    canada.*?guaranty           # Match Canada Guaranty
+                    """,
+                    FLAGS_TO_USE )
+
+GENWORTH_TAG = re.compile(
+                    r"""
+                    genworth
+                    """,
+                    FLAGS_TO_USE )
+
+AIG_TAG = re.compile(
+                    r"""
+                    aig.*?insurance
+                    """,
+                    FLAGS_TO_USE )
+
+CANADAGUARANTY_TAG = re.compile(
+                    r"""
+                    canada.*?guaranty
                     """,
                     FLAGS_TO_USE )
 
