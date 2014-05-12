@@ -63,19 +63,4 @@ def test_extract( csv_filename, extract_func, cutoff_tuple, \
     except ( ValueError, ) as err:
         print err.message
 
-# Test functions
-if __name__ == '__main__' :
-    from makeInsPrivAmount import sort_privamt, get_privamt, extract_privamt
-    from makeInsFmtSafe import sort_insnha, sort_inspriv
-    from makeInsAmount import get_insnha, get_inspriv
-    from makeInsAmount_v3 import sort_ins_list, get_insall_v3
-    from listOfCutoffCoord import DESC_CUTOFFS, PPL_AMOUNT_CUTOFFS, \
-                            DATE_DUE_CUTOFFS, DATE_ISSUE_CUTOFFS
-    csv_filename = r'B:\pynha_ins\csv_raw\macquarie\97523641-2013-12-02-18-10-04.csv'
-    args_dict = dict( csv_filename = csv_filename, cutoff_tuple = ( 250.0, 10 ), \
-                    stop_row_no = 250, absdist_tuple = ( -25.0, -25.0 ) )
-    # Testing sorting function
-    test_sort( sort_func = sort_ins_list, **args_dict )
-    # Testing extract function
-    test_extract( extract_func = get_insall_v3, **args_dict )
 
