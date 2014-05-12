@@ -92,6 +92,14 @@ INSURERS_TAG = re.compile(
                     """,
                     FLAGS_TO_USE )
 
+ID_INSURERS_TAG = re.compile(
+                    r"""
+                    composition.*?mortgage.*?pool   # Match Composition of Mortgage Pool
+                    |
+                    composition.*?bloc              # Match Composition du bloc
+                    """,
+                    FLAGS_TO_USE )
+
 GENWORTH_TAG = re.compile(
                     r"""
                     genworth
@@ -100,7 +108,7 @@ GENWORTH_TAG = re.compile(
 
 AIG_TAG = re.compile(
                     r"""
-                    aig.*?insurance
+                    aig
                     """,
                     FLAGS_TO_USE )
 
