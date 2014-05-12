@@ -255,6 +255,7 @@ def partial_with_wrapper( func, **kwargs ):
     update_wrapper( func_partial, func )
     return func_partial
 
+# DEBUG FUNCTION BY REMOVING SPURRIOUS BRANCHES
 # Create closure function
 def customize_func( get_data_func, cutoff_tuple = None ):
     '''
@@ -289,18 +290,3 @@ def customize_func( get_data_func, cutoff_tuple = None ):
 			print pl_info
         return pl_info
     return get_info
-
-if __name__ == '__main__':
-    HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
-    CUTOFF_TUPLE = ( 275.00, 60.00 )
-    REF_COORD = ( 266.368, 534.935 )
-    csv_filename = r'B:\nha_mbs\csv_raw\national_bank\97007157-2013-11-28-14-29-27.csv'
-    rows_list = get_csvrows( csv_filename, HEADERS, skip_rows_no = 0, stop_row_no = 250 )
-    from makeInsAmount import get_insnha, custom_insnha_mtg
-    f = customize_func( get_data_func = get_insnha, cutoff_tuple = None )
-    res = f( rows_list, csv_filename, tuple_coord = None, debug_print = False )
-    print 'From customize_func -- Without reference coordinates:\n', res
-    f = partial_with_wrapper( custom_insnha_mtg, cutoff_tuple = None )
-    g = f() # Instantiate closure
-    res = g( rows_list, csv_filename, tuple_coord = None, debug_print = False )
-    print 'From partial function -- Without reference coordinates:\n', res
