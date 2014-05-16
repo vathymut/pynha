@@ -44,13 +44,7 @@ def concat_df( result_dir = 'rates' ):
         df_list.append( df )
     return pd.concat( df_list )
 
-_INSURANCE_LIST = [ 'insnha_fmt', 'insnha_mtg', \
-                'inspriv_fmt', 'inspriv_mtg', \
-                'insfmt_v1', 'insall_v1', \
-                'insfmt_v2', 'insall_v2', \
-                'insfmt_v3', 'insall_v3' ]
-
-def concat_df_from_list( dir_list = _INSURANCE_LIST ):
+def concat_df_from_list( dir_list ):
     '''
     Concatenate dataframes in each element of dir_list.
     '''
@@ -68,14 +62,3 @@ def merge_df_from_list( df_list, how = 'outer', left_index = True, \
 
 # Declare functions to import
 __all__ = [ 'concat_df', 'concat_df_from_list', 'concat_df_from_list', 'merge_df_from_list' ]
-
-if __name__ == '__main__':
-    # Concatenate dataframes
-    df_list = concat_df_from_list()
-    df = merge_df_from_list( df_list = df_list )
-    pd.set_printoptions( max_columns=10 )
-    print df.head()
-    print df.tail()
-    FILENAME = join( dirname( HOMEDIR ), 'fmt_ins_excerpt_nha_mbs.csv' )
-    df.to_csv( FILENAME )
-    print PYNHADIR, HOMEDIR
