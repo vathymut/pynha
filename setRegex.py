@@ -68,7 +68,7 @@ INSNHA_TAG = re.compile(
                     |
                     assurance\s*?portefeuille\s*?lnh    # Match portefeuille lnh
                     |
-                    assurance\s*?portefeuille           # Match assurance portefeuille
+                    assurance.+portefeuille             # Match assurance portefeuille
                     """,
                     FLAGS_TO_USE )
 
@@ -100,6 +100,12 @@ ID_INSURERS_TAG = re.compile(
                     """,
                     FLAGS_TO_USE )
 
+CENTRAL_PAYOR_TAG = re.compile(
+                    r"""
+                    central.*?payor         # Match Composition Central Payor
+                    """,
+                    FLAGS_TO_USE )
+
 GENWORTH_TAG = re.compile(
                     r"""
                     genworth
@@ -114,7 +120,17 @@ AIG_TAG = re.compile(
 
 CANADAGUARANTY_TAG = re.compile(
                     r"""
-                    canada.*?guaranty
+                    canada.*?guaranty       # Match Canada Guaranty
+                    """,
+                    FLAGS_TO_USE )
+
+CMHC_TAG = re.compile(
+                    r"""
+                    canada.*?mortgage.*?housing.*?corp
+                    |
+                    cmhc
+                    |
+                    Soci.*?t.*?canadienne.*?hypoth.*?que.*?logement
                     """,
                     FLAGS_TO_USE )
 
