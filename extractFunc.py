@@ -120,8 +120,9 @@ def validate_amount( result_list, types = string.digits, \
     '''
     Return result_list if it passes format check for dollar amount.
     '''
-    no_digits = count_instances( result_list[0], types = types )
-    if max_digits > no_digits > min_digits:
+    mum_list = [ count_instances(result, types = types) for result in result_list ]
+    bool_list = [ max_digits > num > min_digits for num in mum_list ]
+    if any( bool_list ):
         return result_list
     error_print = "The amount is %d digits or less or %d digits or more." % ( min_digits, max_digits )
     raise ValueError( error_print )
@@ -131,8 +132,9 @@ def validate_mtgno( result_list, types = string.digits, \
     '''
     Return result_list if it passes format check for mortgage number.
     '''
-    no_digits = count_instances( result_list[0], types = types )
-    if max_digits >= no_digits >= min_digits:
+    mum_list = [ count_instances(result, types = types) for result in result_list ]
+    bool_list = [ max_digits >= num > min_digits for num in mum_list ]
+    if any( bool_list ):
         return result_list
     error_print = "The number of mortgages is %d digits or less or %d digits or more." % ( min_digits, max_digits )
     raise ValueError( error_print )
@@ -143,9 +145,9 @@ def validate_dates( result_list, \
     '''
     Return result_list if it passes format check for dates.
     '''
-    digits_and_letters = map( count_digits_and_letters, result_list )
-    digits_fmt = [ max_digits > num[0] >= min_digits for num in digits_and_letters ]
-    letters_fmt = [ num[1] >= min_letters for num in digits_and_letters ]
+    num_and_letters = [ count_digits_and_letters(l) for l in result_list ]
+    digits_fmt = [ max_digits > num >= min_digits for num, _ in num_and_letters ]
+    letters_fmt = [ letters >= min_letters for _, letters in num_and_letters ]
     if all( digits_fmt ) and all( letters_fmt ):
         return result_list
     error_print = "The dates do not all pass the format check."
@@ -156,8 +158,9 @@ def validate_rate( result_list, types = string.digits, \
     '''
     Return result_list if it passes format check for dollar amount.
     '''
-    no_digits = count_instances( result_list[0], types = types )
-    if max_digits > no_digits > min_digits:
+    mum_list = [ count_instances(result, types = types) for result in result_list ]
+    bool_list = [ max_digits >= num > min_digits for num in mum_list ]
+    if any( bool_list ):
         return result_list
     error_print = "The rate is %d digits or less or %d digits or more." % ( min_digits, max_digits )
     raise ValueError( error_print )
