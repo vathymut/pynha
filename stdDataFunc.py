@@ -47,6 +47,13 @@ def get_csvrows( filename, headers, skip_rows_no = 0, stop_row_no = 100 ):
                     skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
     return list( gen_id_csvrows( **args_dict ) )
 
+def match_any_re( rows_lines, regex_list ):
+    '''
+    Return True if text in rows_lines matches any of the regex in regex_list.
+    Note: regex in regex_list should be compiled.
+    '''
+    return any( regex.search( rows_lines ) for regex in regex_list )
+
 def extract_text( rows_to_test ):
 	'''
 	Extract text from given rows in rows_to_test.
