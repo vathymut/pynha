@@ -158,7 +158,6 @@ PROFILEPCT_TAG = re.compile(
                     """,
                     FLAGS_TO_USE )
 
-# Used to be called COMPILED_MTGNOEND
 MTGNOEND_TAG = re.compile(
                         r"""
                         maturity\s*?date        # Match maturity date
@@ -168,7 +167,14 @@ DOLLARVAL_TAG = re.compile(
                         r"""
                         dollar\s*?value         # Match dollar value
                         |
-                        valeur.*?dollars       # Match valeurs en dollars
+                        valeur.*?dollars        # Match valeurs en dollars
+                        """, FLAGS_TO_USE )
+
+MTGDESCRIPTION_TAG = re.compile(
+                        r"""
+                        description.*?mortgages     # Match Description of Mortgages
+                        |
+                        description.*?cr.*ances     # Match Description des Créances
                         """, FLAGS_TO_USE )
 
 # Create REGEX to extract information
