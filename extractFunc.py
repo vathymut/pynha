@@ -116,7 +116,7 @@ def count_digits_and_letters( string_to_test, \
     return ( no_digits, no_letters )
 
 def validate_amount( result_list, types = string.digits, \
-                    min_digits = 6, max_digits = 13 ):
+                    min_digits = 6, max_digits = 15 ):
     '''
     Return result_list if it passes format check for dollar amount.
     '''
