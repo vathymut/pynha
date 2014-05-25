@@ -38,6 +38,7 @@ def test_sort( csv_filename, sort_func, cutoff_tuple, \
     try:
         sorted_rows = sort_func( rows_list, **args_dict )
         print ''.join( [ x.text for x in sorted_rows ] )
+        return sorted_rows
     except ( ValueError, ) as err:
         print err.message
 
