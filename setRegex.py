@@ -172,10 +172,18 @@ DOLLARVAL_TAG = re.compile(
 
 MTGDESCRIPTION_TAG = re.compile(
                         r"""
-                        description.*?mortgages     # Match Description of Mortgages
+                        description.*?mortgage      # Match Description of Mortgage(s) Loans
                         |
-                        description.*?cr.*ances     # Match Description des Créances
+                        description.*?cr.*ance     # Match Description des Créance(s)
                         """, FLAGS_TO_USE )
+
+LOANS_TAG = re.compile(
+                        r"""
+                        loans                   # Match Loans
+                        |
+                        pr.*?ts                 # Match prêts
+                        """, FLAGS_TO_USE )
+
 
 # Create REGEX to extract information
 RATE_FMT = re.compile(
