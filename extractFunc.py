@@ -6,7 +6,6 @@ Created on 26/04/2014
 """
 from stdDataFunc import partial_with_wrapper, filter_rows, \
                         sort_rows, get_pool_info, customize_func
-import string
 from time import sleep
 from setUpEnv import wrap_set_up_env, process_csv_files
 from recordLoggerId import get_stats_from_loggers, \
@@ -26,8 +25,8 @@ def get_namedtuple( rows_list, sort_func, extract_func, \
     absdist_tuple is the absoulte max acceptable distance to ref_cord.
     '''
     if cutoff_tuple is not None:
-        args_dict = dict( cutoff_tuple = cutoff_tuple, ref_cord = ref_cord, absdist_tuple = absdist_tuple )
-        sorted_rows = sort_func( rows_list, **args_dict )
+        kwargs = dict( cutoff_tuple = cutoff_tuple, ref_cord = ref_cord, absdist_tuple = absdist_tuple )
+        sorted_rows = sort_func( rows_list, **kwargs )
         return extract_func( sorted_rows )[ :last_idx ]
     sorted_rows = sort_func( rows_list )
     return extract_func( sorted_rows )
@@ -61,10 +60,10 @@ def sort_for_info( rows_list, func_find, cutoff_tuple = None,  \
     rows_list = sort_rows( rows_list, ref_cord = ref_cord, use_loss_function = use_loss_function )
     if ref_cord is None:
         ref_cord, idx_refcord = func_find( rows_list )
-    args_dict = dict( ref_cord = ref_cord, cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )
+    kwargs = dict( ref_cord = ref_cord, cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )
     idx_stoprow = idx_refcord + idx_offset
     if cutoff_tuple is not None:
-        return filter_rows( rows_list[ :idx_stoprow], **args_dict )
+        return filter_rows( rows_list[ :idx_stoprow], **kwargs )
     return rows_list[ idx_refcord : idx_stoprow ]
 
 def set_default_to_sort( refcoord_regex, fp_regex = None, idx_offset = 15 ):
@@ -73,10 +72,10 @@ def set_default_to_sort( refcoord_regex, fp_regex = None, idx_offset = 15 ):
     refcoord_regex finds the position of the anchor text.
     fp_regex (false positive) discards the result if it matches.
     '''
-    args_dict = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex )
-    find_cust = partial_with_wrapper( find_ref_coord, **args_dict )
-    args_dict = dict( func_find = find_cust, idx_offset = idx_offset )
-    return partial_with_wrapper( sort_for_info, **args_dict )
+    kwargs = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex )
+    find_cust = partial_with_wrapper( find_ref_coord, **kwargs )
+    kwargs = dict( func_find = find_cust, idx_offset = idx_offset )
+    return partial_with_wrapper( sort_for_info, **kwargs )
 
 def is_sorted( rows_list, sort_func, cutoff_tuple = None, \
                 ref_cord = None, absdist_tuple = (-25.0, -25.0) ):
@@ -87,83 +86,15 @@ def is_sorted( rows_list, sort_func, cutoff_tuple = None, \
     cutoff_tuple is the relative max acceptable distance to ref_cord.
     absdist_tuple is the absoulte max acceptable distance to ref_cord.
     '''
-    args_dict = dict( ref_cord = ref_cord, absdist_tuple = absdist_tuple )
+    kwargs = dict( ref_cord = ref_cord, absdist_tuple = absdist_tuple )
     try:
         if cutoff_tuple is not None and ref_cord is not None:
-            sort_func( rows_list, cutoff_tuple, **args_dict )
+            sort_func( rows_list, cutoff_tuple, **kwargs )
         else:
             sort_func( rows_list )
         return True
     except ( ValueError, ) as err:
         return False
-
-def count_instances( string_to_test, types = string.digits ):
-    '''
-    Count the number of types (digits) found in the string string_to_test.
-    '''
-    string_as_list = list( string_to_test )
-    string_list_filtered = filter( lambda x: x in types, string_as_list )
-    return len( string_list_filtered )
-
-def count_digits_and_letters( string_to_test, \
-                            digits = string.digits, \
-                            letters = string.ascii_letters ):
-    '''
-    Count the number of types (digits) found in the string string_to_test.
-    '''
-    no_digits = count_instances( string_to_test, types = digits )
-    no_letters = count_instances( string_to_test, types = letters )
-    return ( no_digits, no_letters )
-
-def validate_amount( result_list, types = string.digits, \
-                    min_digits = 6, max_digits = 15 ):
-    '''
-    Return result_list if it passes format check for dollar amount.
-    '''
-    mum_list = [ count_instances(result, types = types) for result in result_list ]
-    bool_list = [ max_digits > num > min_digits for num in mum_list ]
-    if any( bool_list ):
-        return result_list
-    error_print = "The amount is %d digits or less or %d digits or more." % ( min_digits, max_digits )
-    raise ValueError( error_print )
-
-def validate_mtgno( result_list, types = string.digits, \
-                    min_digits = 1, max_digits = 5 ):
-    '''
-    Return result_list if it passes format check for mortgage number.
-    '''
-    mum_list = [ count_instances(result, types = types) for result in result_list ]
-    bool_list = [ max_digits >= num > min_digits for num in mum_list ]
-    if any( bool_list ):
-        return result_list
-    error_print = "The number of mortgages is %d digits or less or %d digits or more." % ( min_digits, max_digits )
-    raise ValueError( error_print )
-
-def validate_dates( result_list, \
-                    min_digits = 4, max_digits = 8, \
-                    min_letters = 2 ):
-    '''
-    Return result_list if it passes format check for dates.
-    '''
-    num_and_letters = [ count_digits_and_letters(l) for l in result_list ]
-    digits_fmt = [ max_digits > num >= min_digits for num, _ in num_and_letters ]
-    letters_fmt = [ letters >= min_letters for _, letters in num_and_letters ]
-    if all( digits_fmt ) and all( letters_fmt ):
-        return result_list
-    error_print = "The dates do not all pass the format check."
-    raise ValueError( error_print )
-
-def validate_rate( result_list, types = string.digits, \
-                    min_digits = 1, max_digits = 7 ):
-    '''
-    Return result_list if it passes format check for dollar amount.
-    '''
-    mum_list = [ count_instances(result, types = types) for result in result_list ]
-    bool_list = [ max_digits >= num > min_digits for num in mum_list ]
-    if any( bool_list ):
-        return result_list
-    error_print = "The rate is %d digits or less or %d digits or more." % ( min_digits, max_digits )
-    raise ValueError( error_print )
 
 def redo_issuer( result_type, keep_list = None, logging_dir = None ):
     '''
@@ -206,17 +137,17 @@ def extract_info( func_custom, \
     '''
     if from_scratch:
         redo_issuer( result_type, keep_list = keep_list, logging_dir = logging_dir )
-    args_dict = dict( cutoff_list = cutoff_list, refcoord_list = refcoord_list, \
+    kwargs = dict( cutoff_list = cutoff_list, refcoord_list = refcoord_list, \
                     result_type = result_type, logging_dir = logging_dir, \
                     keep_list = keep_list, func_custom = func_custom, from_dir = from_dir )
-    log_outcomes, write_info, set_up_env = wrap_set_up_env( **args_dict )
+    log_outcomes, write_info, set_up_env = wrap_set_up_env( **kwargs )
     # Process files
-    args_dict = dict( set_up_env = set_up_env, log_outcomes = log_outcomes, \
+    kwargs = dict( set_up_env = set_up_env, log_outcomes = log_outcomes, \
                     write_info = write_info, skip_rows_no = skip_rows_no, \
                     stop_row_no = stop_row_no, result_type = result_type, \
                     logging_dir = logging_dir, absdist_tuple = absdist_tuple, \
                     test_run = test_run )
-    ftl_files = process_csv_files( **args_dict )
+    ftl_files = process_csv_files( **kwargs )
     # Get stats
     stats = get_stats_from_loggers( issuers_list = keep_list, logging_folder = logging_dir )
     print '\n\t\t\tPrinting stats:\n\n', stats
@@ -233,14 +164,14 @@ def set_extract_default( func_custom, result_type, \
     if logging_dir is None:
         logging_dir = 'logging_' + result_type
     if absdist_tuple is not None:
-        args_dict = dict( func_custom = func_custom, cutoff_list = cutoff_list, \
+        kwargs = dict( func_custom = func_custom, cutoff_list = cutoff_list, \
                         result_type = result_type, logging_dir = logging_dir, \
                         absdist_tuple = absdist_tuple, from_dir = from_dir )
     else:
-        args_dict = dict( func_custom = func_custom, cutoff_list = cutoff_list, \
+        kwargs = dict( func_custom = func_custom, cutoff_list = cutoff_list, \
                         result_type = result_type, logging_dir = logging_dir, \
                         from_dir = from_dir )
-    return partial_with_wrapper( extract_info, **args_dict )
+    return partial_with_wrapper( extract_info, **kwargs )
 
 def create_default_dictargs( issuer = 'alberta_treasury' ):
     '''
@@ -285,11 +216,11 @@ def sort_and_extract( refcoord_regex, extract_regex, \
     delete_regex, start_regex and end_regex are further arguments
     passed to get_pool_info, along with extract_regex (aka patterns).
     '''
-    args_dict = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex, idx_offset = idx_offset)
-    sort_func = set_default_to_sort( **args_dict )
-    args_dict = dict( patterns = extract_regex, delete_regex = delete_regex, \
+    kwargs = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex, idx_offset = idx_offset)
+    sort_func = set_default_to_sort( **kwargs )
+    kwargs = dict( patterns = extract_regex, delete_regex = delete_regex, \
                     start_regex = start_regex, end_regex = end_regex )
-    get_func = partial_with_wrapper( get_pool_info, **args_dict )
+    get_func = partial_with_wrapper( get_pool_info, **kwargs )
     return ( sort_func, get_func )
 
 def wrap_extract( get_func, \
@@ -316,15 +247,11 @@ BIGSIX_TUPLE = ( 'rbc', 'rbc_dominion', 'bmo', 'cibc', 'desjardins', 'national_b
 			'national_bank_financial', 'scotia_bank', 'td_bank', 'td_securities' )
 
 # Declare functions to import
-__all__ = [ 'find_ref_coord', 'sort_for_info', \
-            'set_default_to_sort', 'is_sorted', \
-            'get_namedtuple', 'validate_amount', \
-            'validate_mtgno', 'validate_dates', \
-            'validate_rate', \
-            'redo_issuer', 'extract_info', \
-            'set_extract_default', 'create_default_dictargs', \
-            'update_dictargs', 'gen_dictargs', \
-            'sort_and_extract', 'wrap_extract' ]
+__all__ = [ 'get_namedtuple', 'find_ref_coord', 'sort_for_info', \
+            'set_default_to_sort', 'is_sorted', 'redo_issuer', \
+            'extract_info', 'set_extract_default', 'create_default_dictargs', \
+            'update_dictargs', 'gen_dictargs', 'sort_and_extract', \
+            'wrap_extract' ]
 
 if __name__ == '__main__':
     print 'Created functions to sort rows and extract text.'
