@@ -43,23 +43,15 @@ def get_csvrows( filename, headers, skip_rows_no = 0, stop_row_no = 100 ):
     '''
     Get rows list from the generator gen_id_csvrows.
     '''
-    args_dict = dict( filename = filename, headers = headers, \
+    kwargs = dict( filename = filename, headers = headers, \
                     skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
-    return list( gen_id_csvrows( **args_dict ) )
+    return list( gen_id_csvrows( **kwargs ) )
 
-def match_any_re( rows_lines, regex_list ):
-    '''
-    Return True if text in rows_lines matches any of the regex in regex_list.
-    Note: regex in regex_list should be compiled.
-    '''
-    return any( regex.search( rows_lines ) for regex in regex_list )
-
-def extract_text( rows_to_test ):
+def extract_text( rows ):
 	'''
-	Extract text from given rows in rows_to_test.
-	Return text in a single line.
+	Extract text from rows. Return text in a single line.
 	'''
-	rows_list = [ row.text for row in rows_to_test ]
+	rows_list = [ row.text for row in rows ]
 	rows_lines = ' '.join( rows_list )
 	return rows_lines
 
@@ -188,8 +180,8 @@ def filter_rows( rows_list, ref_cord, cutoff_tuple, absdist_tuple = (-25.0, -25.
 	ref_cord (the reference point).
     '''
     get_filter_diff = partial( get_score_diff, ref_cord = ref_cord )
-    args_dict = dict( cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )
-    in_range_custom = partial( in_range, **args_dict )
+    kwargs = dict( cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )
+    in_range_custom = partial( in_range, **kwargs )
     is_diff_range = lambda row: in_range_custom( get_filter_diff( row ) )
     l = filter( is_diff_range, rows_list )
     if not l:
@@ -286,9 +278,9 @@ def customize_func( get_data_func, cutoff_tuple = None ):
         poolno = get_poolno( csv_filename )
         if debug_print:
             print poolno
-        args_dict = dict( ref_cord = tuple_coord, absdist_tuple = absdist_tuple )
+        kwargs = dict( ref_cord = tuple_coord, absdist_tuple = absdist_tuple )
         if cutoff_tuple is not None and absdist_tuple is not None:
-            other_info = custom_get_data_func( rows_list, **args_dict )
+            other_info = custom_get_data_func( rows_list, **kwargs )
         else:
             other_info = custom_get_data_func( rows_list )
         results = [ poolno, other_info ]
