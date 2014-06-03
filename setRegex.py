@@ -262,5 +262,10 @@ RATE_FP_FMT = re.compile(
                     """,
                     FLAGS_TO_USE )
 
+PERCENT_FMT = re.compile(
+                    r"""
+                    %
+                    """, FLAGS_TO_USE)
+
 if __name__ == '__main__':
     print 'Created regexes'
