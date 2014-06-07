@@ -4,6 +4,7 @@
 
 """
 from ioFunc import create_issuer_dir, check_if_dir_to_visit, goto_pdf_dir
+import ioFunc
 from urlparse import urljoin, urlsplit
 from urllib2 import urlopen, Request
 from time import sleep
@@ -12,18 +13,6 @@ import datetime
 from fnmatch import filter # Use glob.glob instead
 from os import chdir, listdir, getcwd
 from os.path import dirname, abspath, join, splitext, basename
-
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
-HOMEDIR = dirname( dirname( abspath( __file__ ) ) )
-chdir( HOMEDIR )
-BASEURL = 'http://www.cmhc-schl.gc.ca'
-
-# Get all files
-all_filenames = listdir( HOMEDIR )
-
-# Keep all .txt files
-pattern = 'r*.txt'
-issuers_filenames = filter( all_filenames, pattern )
 
 def get_links_from_file( filename ):
 	"""
@@ -83,9 +72,24 @@ def get_filename_and_url( filenames ):
 		for url in get_links_from_file( filename ):
 			 yield ( filename, url )
 
+# Home Directory - On RZ machine: 'B:\\nha_mbs'
+MAINDIR = dirname( dirname( abspath( __file__ ) ) )
+HOMEDIR = join( MAINDIR, 'pynha_scraper' )
+ioFunc.HOMEDIR  = HOMEDIR
+# Website url
+BASEURL = 'http://www.cmhc-schl.gc.ca'
+
+# Get all files
+chdir( HOMEDIR )
+all_filenames = listdir( HOMEDIR )
+
+# Keep all .txt files
+pattern = 'r*.txt'
+issuers_filenames = filter( all_filenames, pattern )
+
 if __name__ == '__main__':
-	ISSUER_DIRS = ( 'rbc', 'bmo' )
-	for filename, url in get_filename_and_url( issuers_filenames ):
+    ISSUER_DIRS = ( 'rbc', 'rbc_dominion' )
+    for filename, url in get_filename_and_url( issuers_filenames ):
 		new_issuer_dir = create_issuer_dir( filename, prefix_path = 'pdf_downloaded' )
 		if not check_if_dir_to_visit( new_issuer_dir, ISSUER_DIRS ):
 			continue
@@ -97,4 +101,4 @@ if __name__ == '__main__':
 				continue
 			download_pdf( abs_link, pdf_filename )
 			print 'in directory:' , getcwd()
-			sleep( 10 )
+			sleep( 3 )
