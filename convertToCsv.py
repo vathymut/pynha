@@ -43,10 +43,12 @@ ISSUER_DIRS = list( gen_issuer_names( skip_list = None ) )
 PAGES_TO_PARSE_FIRSTPAGE = ( 0, 1, 2, 3 )
 PAGES_TO_PARSE_RAW = ( 5, 6, 7, 8 )
 
-def pdf_to_csv( pdf_dir = PDFDIR, \
-                csv_dir = CSVDIR_FIRSTPAGE, \
-                keep_issuers = ISSUER_DIRS, \
-                pages_to_parse = PAGES_TO_PARSE_FIRSTPAGE ):
+def pdf_to_csv(
+    pdf_dir = PDFDIR,
+    csv_dir = CSVDIR_FIRSTPAGE,
+    keep_issuers = ISSUER_DIRS,
+    pages_to_parse = PAGES_TO_PARSE_FIRSTPAGE
+    ):
     '''
     Convert pdf files in pdf_dir to csv for the pages in pages_to_parse.
     Converted csv files are saved in csv_dir.
@@ -55,8 +57,8 @@ def pdf_to_csv( pdf_dir = PDFDIR, \
     HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
     chdir( pdf_dir )
     failed_files = []
-    args = dict( pdf_dir = pdf_dir, csv_dir = csv_dir, keep_issuers = keep_issuers )
-    for csv_file, pdf_file in gen_pdf_to_csv( **args ):
+    kwargs = dict( pdf_dir = pdf_dir, csv_dir = csv_dir, keep_issuers = keep_issuers )
+    for csv_file, pdf_file in gen_pdf_to_csv( **kwargs ):
         print csv_file, pdf_file
         try:
             writecsv_to_path( csv_file, pdf_file, HEADERS, pages_to_parse )
@@ -69,10 +71,16 @@ def pdf_to_csv( pdf_dir = PDFDIR, \
 
 if __name__ == '__main__':
     ######### CSVDIR_FIRSTPAGE #########
-    pdf_to_csv( pdf_dir = PDFDIR, csv_dir = CSVDIR_FIRSTPAGE, \
-                keep_issuers = ISSUER_DIRS, \
-                pages_to_parse = PAGES_TO_PARSE_FIRSTPAGE )
+    pdf_to_csv(
+        pdf_dir = PDFDIR,
+        csv_dir = CSVDIR_FIRSTPAGE,
+        keep_issuers = ISSUER_DIRS,
+        pages_to_parse = PAGES_TO_PARSE_FIRSTPAGE
+        )
     ######### CSVDIR_RAW #########
-    pdf_to_csv( pdf_dir = PDFDIR, csv_dir = CSVDIR_RAW, \
-            keep_issuers = ISSUER_DIRS, \
-            pages_to_parse = PAGES_TO_PARSE_RAW )
+    pdf_to_csv(
+        pdf_dir = PDFDIR,
+        csv_dir = CSVDIR_RAW,
+        keep_issuers = ISSUER_DIRS,
+        pages_to_parse = PAGES_TO_PARSE_RAW
+        )

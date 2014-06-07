@@ -19,7 +19,7 @@ from itertools import chain
 
 def with_pdf( pdf_path, pdf_pwd = '' ):
 	'''
-	Open the pdf document; the file is not password-protected. 
+	Open the pdf document; the file is not password-protected.
 	If it is, pdf_pwd is the password. Return the pdfminer doc.
 	'''
 	fp = open( pdf_path, 'rb' )
@@ -32,7 +32,7 @@ def with_pdf( pdf_path, pdf_pwd = '' ):
 	# check that doc is extractable
 	if doc.is_extractable:
 		return doc
-	
+
 def get_pages( pdf_doc, pages_to_parse = None ):
     '''
     Only parse the pdf pages in pages_to_parse.
@@ -47,10 +47,10 @@ def get_pages( pdf_doc, pages_to_parse = None ):
                 yield page_no, page
             else:
                 continue
-				
+
 def set_up_interpreter( ):
 	'''
-	Set up pdf interpreter and device to extract layout of pages. 
+	Set up pdf interpreter and device to extract layout of pages.
 	Simply takes care of overhead.
 	'''
 	rsrcmgr = PDFResourceManager( )
@@ -59,7 +59,7 @@ def set_up_interpreter( ):
 	device = PDFPageAggregator( rsrcmgr, laparams=laparams )
 	interpreter = PDFPageInterpreter( rsrcmgr, device )
 	return device, interpreter
-	
+
 def get_pdf_layout( pdf_page ):
     '''
     Return the layout of the pdf page. Takes care of overhead.
@@ -67,11 +67,11 @@ def get_pdf_layout( pdf_page ):
     device, interpreter = set_up_interpreter( )
     interpreter.process_page( pdf_page )
     layout = device.get_result( )
-    return layout    
-	
+    return layout
+
 def to_bytestring( s, enc='ascii', error='replace' ):
     """
-    Convert the given unicode string to a bytestring using the standard 
+    Convert the given unicode string to a bytestring using the standard
     encoding (ascii).
     """
     if s:
@@ -94,7 +94,7 @@ def process_lt_obj( layout ):
 		result_list.extend( obj.bbox )
 		result_list.append( process_text( obj ) )
 		yield result_list
-	
+
 def process_text( obj ):
 	'''
 	Extract the text from the pdf object.
@@ -106,11 +106,11 @@ def process_text( obj ):
 	except AttributeError:
 		# if obj doesn't have get_text() method
 		empty_string = ''
-		return empty_string		
+		return empty_string
 
 def generate_rows( pdf_doc, pages_to_parse ):
 	'''
-	Return tuples ( page_no, obj_no, bbox_coordinates, text ) 
+	Return tuples ( page_no, obj_no, bbox_coordinates, text )
 	to be written to csv for all pages in pages_to_parse.
 	'''
 	for page_no, page in get_pages( pdf_doc, pages_to_parse ):
@@ -128,10 +128,20 @@ def gen_rows_frompath( from_pdf_path, pages_to_parse ):
 	for csv_row_list in generate_rows( pdfminer_doc, pages_to_parse ):
 		yield csv_row_list
 
+## pdfminer_doc = with_pdf( pdf_path )
+## page_gen = get_pages( pdfminer_doc, PAGES_TO_PARSE )
+## page_no, page = next( page_gen )
+## layout = get_pdf_layout( page )
+## obj_gen = enumerate( layout )
+## obj_no, obj = next( obj_gen )
+## pprint( obj.__dict__ )
+## obj_no, obj = next( obj_gen ); pprint( obj.__dict__ )
+
+from pprint import pprint
 if __name__ == '__main__':
-	# Test case
-	pdf_path = r'B:\nha_mbs\pdf_downloaded\rbc\86700138-2013-11-26-10-17-34.pdf'
-	PAGES_TO_PARSE = ( 7, 8 )
-	for csv_row_list in gen_rows_frompath( pdf_path, PAGES_TO_PARSE ):
-		print csv_row_list
-	
+    # Test case
+    pdf_path = r'B:\pynha_scraper\pdf_downloaded\home_trust\96602560-2013-12-02-01-10-27.pdf'
+    PAGES_TO_PARSE = ( 0, 1, 2, 3 )
+    for csv_row_list in gen_rows_frompath( pdf_path, PAGES_TO_PARSE ):
+        print csv_row_list
+
