@@ -108,7 +108,9 @@ CENTRAL_PAYOR_TAG = re.compile(
 
 GENWORTH_TAG = re.compile(
                     r"""
-                    genworth
+                    genworth                # Match GENWORTH
+                    |
+                    ge.*?capital.*?mort     # Match GE CAPITAL MORTGAGE
                     """,
                     FLAGS_TO_USE )
 
@@ -236,7 +238,7 @@ DECIMAL_FMT = re.compile(
 
 CLSDMTG_AMOUNT_FMT = re.compile(
                     r"""
-                    \d+[,\s\.\d]*       # Match optional space, '.' or comma ','
+                    \d+[, \.\d]*       # Match optional space, '.' or comma ','
                     """,
                     FLAGS_TO_USE )
 
