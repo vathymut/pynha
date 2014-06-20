@@ -137,10 +137,9 @@ def gen_rows_frompath( from_pdf_path, pages_to_parse ):
 ## pprint( obj.__dict__ )
 ## obj_no, obj = next( obj_gen ); pprint( obj.__dict__ )
 
-from pprint import pprint
 if __name__ == '__main__':
     # Test case
-    pdf_path = r'B:\pynha_scraper\pdf_downloaded\home_trust\96602560-2013-12-02-01-10-27.pdf'
+    pdf_path = r'B:\pynha_ocr\96602560-2013-12-02-01-10-27.pdf'
     PAGES_TO_PARSE = ( 0, 1, 2, 3 )
     for csv_row_list in gen_rows_frompath( pdf_path, PAGES_TO_PARSE ):
         print csv_row_list

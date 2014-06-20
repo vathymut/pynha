@@ -71,7 +71,7 @@ def write_summ_loggers_to_csv( summ_list, result_type = 'rates', summ_dir = 'sum
     result_type in the folder summ_dir.
     """
     no_issuers = len( summ_list )
-    overwrite_log = no_issuers == 63
+    overwrite_log = no_issuers == len( list( gen_issuer_names() ) )
     if not overwrite_log:
         print 'Processed %s issuer(s) -- Not overwriting log folder' % ( no_issuers )
         return

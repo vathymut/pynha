@@ -139,9 +139,9 @@ def process_csv_files( set_up_env, \
     '''
     HEADERS_CSV = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
     for csv_filename, issuer, extract_data in set_up_env:
+        kwargs = dict( filename = csv_filename, headers = HEADERS_CSV, skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
         with handle_newline_error( ):
-            rows_list = get_csvrows( filename = csv_filename, headers = HEADERS_CSV, \
-                            skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
+            rows_list = get_csvrows( **kwargs )
             with log_outcomes( dir_to_log = issuer, content = csv_filename, test_run = test_run ):
                 if absdist_tuple is None:
                     pl_info = extract_data( rows_list, csv_filename )

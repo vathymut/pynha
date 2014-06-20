@@ -55,11 +55,12 @@ def test_extract( csv_filename, extract_func, cutoff_tuple, \
     cutoff_list, refcoord_list and absdist_tuple are arguments to func_apply.
     headers, skip_rows and stop_rows are arguments to gen_id_csvrows.
     '''
-    args_dict = dict( skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
-    rows_list = get_csvrows( csv_filename, headers, **args_dict )
+    kwargs = dict( skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
+    rows_list = get_csvrows( csv_filename, headers, **kwargs )
     print 'Testing function:', extract_func.__name__
     try:
-        result = extract_func( rows_list, cutoff_tuple = cutoff_tuple )
+        kwargs = dict( absdist_tuple = absdist_tuple )
+        result = extract_func( rows_list, cutoff_tuple = cutoff_tuple, **kwargs )
         print 'Without reference coordinates:', result
     except ( ValueError, ) as err:
         print err.message
