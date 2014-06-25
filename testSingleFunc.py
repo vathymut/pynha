@@ -59,8 +59,8 @@ def test_extract( csv_filename, extract_func, cutoff_tuple, \
     rows_list = get_csvrows( csv_filename, headers, **kwargs )
     print 'Testing function:', extract_func.__name__
     try:
-        kwargs = dict( absdist_tuple = absdist_tuple )
-        result = extract_func( rows_list, cutoff_tuple = cutoff_tuple, **kwargs )
+        kwargs = dict( cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )
+        result = extract_func( rows_list, **kwargs )
         print 'Without reference coordinates:', result
     except ( ValueError, ) as err:
         print err.message

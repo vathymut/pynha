@@ -96,7 +96,7 @@ def validate_mtgno( result_list, types = string.digits, \
     Return result_list if it passes format check for mortgage number.
     '''
     mum_list = [ count_instances(result, types = types) for result in result_list ]
-    bool_list = [ max_digits >= num > min_digits for num in mum_list ]
+    bool_list = [ max_digits >= num and num >= min_digits for num in mum_list ]
     if any( bool_list ):
         return result_list
     print 'Mortgage no.:\n', result_list
