@@ -57,7 +57,8 @@ def sort_for_info( rows_list, func_find, cutoff_tuple = None,  \
         cutoff_tuple, ref_cord and func_sort
     func_find should be a function i.e. find_refrate, find_refdateissue, etc
     '''
-    rows_list = sort_rows( rows_list, ref_cord = ref_cord, use_loss_function = use_loss_function )
+    kwargs = dict( ref_cord = ref_cord, use_loss_function = use_loss_function )
+    rows_list = sort_rows( rows_list, **kwargs )
     if ref_cord is None:
         ref_cord, idx_refcord = func_find( rows_list )
     kwargs = dict( ref_cord = ref_cord, cutoff_tuple = cutoff_tuple, absdist_tuple = absdist_tuple )

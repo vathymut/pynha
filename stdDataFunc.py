@@ -69,7 +69,7 @@ def set_text_beginning( rows_lines, start_regex = None ):
     '''
     try:
         m = start_regex.search( rows_lines )
-        return rows_lines[ m.end(): ]
+        return rows_lines[ m.start(): ]
     except ( AttributeError, ) as err:
         return rows_lines
 
