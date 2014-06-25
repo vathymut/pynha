@@ -27,6 +27,7 @@ DATE_INT_CUTOFFS.append( ( 275.0, 60.0 ) )
 ########################################
 MTGNO_CUTOFFS = list( )
 MTGNO_CUTOFFS.append( ( 275.00, 25.00 ) )
+MTGNO_CUTOFFS.append( ( 250.00, 30.00 ) )
 
 ########################################
 DESC_CUTOFFS = list( )
