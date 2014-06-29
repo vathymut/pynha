@@ -201,14 +201,14 @@ RATE_FMT = re.compile(
 
 DATE_FMT = re.compile(
                     r"""
-                    [a-z \.,]{1,15}?        # month, followed by spaces, ',' and '.' (OPTIONAL)
-                    [\di]+?                 # day, digits - also accept 'I'
-                    [stndr\., ]*?           # 1st, 2nd, 3rd, ',' or '.' (OPTIONAL)
-                    [12][\d ]{3,4}          # the year (4 digits)
-                    |                       # NOW THE FRENCH REGEX
-                    \d{1,2}                 # day, digits
-                    [a-z\ .,]{1,15}?        # month, followed by spaces, ',' and '.' (OPTIONAL)
-                    [12][\d ]{3,4}          # the year (4 digits)
+                    [a-z ][a-z \.,]{1,14}?      # month, followed by spaces, ',' and '.' (OPTIONAL)
+                    [\di]+?                     # day, digits - also accept 'I'
+                    [stndr\., ]*?               # 1st, 2nd, 3rd, ',' or '.' (OPTIONAL)
+                    [12][\d ]{3,4}              # the year (4 digits)
+                    |                           # NOW THE FRENCH REGEX
+                    \d{1,2}                     # day, digits
+                    [a-z ][a-z\ ., ]*           # month, followed by spaces, ',' and '.' (OPTIONAL)
+                    [12][\d ]{3,4}              # the year (4 digits)
                     """,
                     FLAGS_TO_USE )
 
