@@ -19,13 +19,13 @@ def test_csv_file( csv_filename, func_apply, cutoff_list, \
                 headers = HEADERS, \
                 skip_rows_no = 0, \
                 stop_row_no = 120 ):
-    '''
+    """
     Use func_apply on file csv_filename and return info.
     func_apply could be:
         custom_rate, custom_date_issue, custom_date_due
     cutoff_list, refcoord_list and absdist_tuple are arguments to func_apply.
     headers, skip_rows and stop_rows are arguments to gen_id_csvrows.
-    '''
+    """
     is_given = refcoord_list is not None
     args_dict = dict( filename = csv_filename, headers = headers, \
                     skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
