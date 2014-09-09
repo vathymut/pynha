@@ -12,10 +12,14 @@ from recordLoggerId import get_stats_from_loggers, \
                         write_summ_loggers_to_csv, delete_log_files
 from ioFunc import gen_issuer_names
 
-def get_namedtuple( rows_list, sort_func, extract_func, \
-                    cutoff_tuple = None, last_idx = 5, \
-                    ref_cord = None, absdist_tuple = (-25.0, -25.0) ):
-    '''
+def get_namedtuple( rows_list, \
+                    sort_func, \
+                    extract_func, \
+                    cutoff_tuple = None, \
+                    last_idx = 5, \
+                    ref_cord = None, \
+                    absdist_tuple = (-25.0, -25.0) ):
+    """
     sort_func filters the rows in rows_list accordingly.
     extract_func extracts data from the sorted rows in a list.
     last_idx takes the nth element from the resulting list above.
@@ -23,7 +27,7 @@ def get_namedtuple( rows_list, sort_func, extract_func, \
     Otherwise ref_cord is tuple of (x0, y0) reference coordinates.
     cutoff_tuple is the relative max acceptable distance to ref_cord.
     absdist_tuple is the absoulte max acceptable distance to ref_cord.
-    '''
+    """
     if cutoff_tuple is not None:
         kwargs = dict( cutoff_tuple = cutoff_tuple, ref_cord = ref_cord, absdist_tuple = absdist_tuple )
         sorted_rows = sort_func( rows_list, **kwargs )
@@ -31,13 +35,30 @@ def get_namedtuple( rows_list, sort_func, extract_func, \
     sorted_rows = sort_func( rows_list )
     return extract_func( sorted_rows )
 
+def find_refrow( rows_to_test, refcoord_regex, fp_regex = None ):
+    """
+    Find the row in rows_to_test whose text matches the regex refcoord_regex.
+    Return the named tuple of matching row and its index.
+    Also return the index of the matching row.
+    If the row matches the regex fp_regex (false positive), discard result.
+    """
+    for idx_refcord, row in enumerate( rows_to_test ):
+        m = refcoord_regex.search( row.text )
+        if fp_regex is not None:
+            n = fp_regex.search( row.text )
+            if m and not n:
+                return row, idx_refcord
+        elif m and fp_regex is None:
+            return row, idx_refcord
+    raise ValueError( "No reference coordinates found." )
+
 def find_ref_coord( rows_to_test, refcoord_regex, fp_regex = None ):
-    '''
+    """
     Find the row in rows_to_test whose text matches the regex refcoord_regex.
     Return the coordinate tuple (x0, y0) of the matching row.
     Also return the index of the matching row.
     If the row matches the regex fp_regex (false positive), discard result.
-    '''
+    """
     for idx_refcord, row in enumerate( rows_to_test ):
         m = refcoord_regex.search( row.text )
         if fp_regex is not None:
@@ -48,15 +69,18 @@ def find_ref_coord( rows_to_test, refcoord_regex, fp_regex = None ):
             return ( float( row.x0 ), float( row.y0 ) ), idx_refcord
     raise ValueError( "No reference coordinates found." )
 
-def sort_for_info( rows_list, func_find, cutoff_tuple = None,  \
-                ref_cord = None, use_loss_function = False, \
+def sort_for_info( rows_list, \
+                func_find, \
+                cutoff_tuple = None,  \
+                ref_cord = None, \
+                use_loss_function = False, \
                 absdist_tuple = (-25.0, -25.0), \
                 idx_offset = 15 ):
-    '''
+    """
     Return rows for rows_list matching the criteria based on:
         cutoff_tuple, ref_cord and func_sort
     func_find should be a function i.e. find_refrate, find_refdateissue, etc
-    '''
+    """
     kwargs = dict( ref_cord = ref_cord, use_loss_function = use_loss_function )
     rows_list = sort_rows( rows_list, **kwargs )
     if ref_cord is None:
@@ -68,11 +92,11 @@ def sort_for_info( rows_list, func_find, cutoff_tuple = None,  \
     return rows_list[ idx_refcord : idx_stoprow ]
 
 def set_default_to_sort( refcoord_regex, fp_regex = None, idx_offset = 15 ):
-    '''
+    """
     Return function to sort rows with the appropriate default arguments.
     refcoord_regex finds the position of the anchor text.
     fp_regex (false positive) discards the result if it matches.
-    '''
+    """
     kwargs = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex )
     find_cust = partial_with_wrapper( find_ref_coord, **kwargs )
     kwargs = dict( func_find = find_cust, idx_offset = idx_offset )
@@ -80,13 +104,13 @@ def set_default_to_sort( refcoord_regex, fp_regex = None, idx_offset = 15 ):
 
 def is_sorted( rows_list, sort_func, cutoff_tuple = None, \
                 ref_cord = None, absdist_tuple = (-25.0, -25.0) ):
-    '''
+    """
     Returns True if a row in rows_list matches the format specified.
     if ref_cord is None, try to find it first.
     Otherwise ref_cord is tuple of (x0, y0) reference coordinates.
     cutoff_tuple is the relative max acceptable distance to ref_cord.
     absdist_tuple is the absoulte max acceptable distance to ref_cord.
-    '''
+    """
     kwargs = dict( ref_cord = ref_cord, absdist_tuple = absdist_tuple )
     try:
         if cutoff_tuple is not None and ref_cord is not None:
@@ -98,10 +122,10 @@ def is_sorted( rows_list, sort_func, cutoff_tuple = None, \
         return False
 
 def redo_issuer( result_type, keep_list = None, logging_dir = None ):
-    '''
+    """
     Delete all the previous results for issuers in keep_list.
     If keep_issuers is None, get all issuers.
-    '''
+    """
     if logging_dir is None:
         logging_dir = 'logging_' + result_type
     if keep_list is None:
@@ -124,7 +148,7 @@ def extract_info( func_custom, \
                     absdist_tuple = (-25.0, -25.0), \
                     test_run = True, \
                     from_dir = 'csv_raw' ):
-    '''
+    """
     Extract info from the circulars using the function func_custom.
     func_custom could be:
         custom_rate, custom_date_issue, custom_date_due
@@ -135,7 +159,7 @@ def extract_info( func_custom, \
     If from_scratch, delete all the previous results for issuers in keep_list.
     If test_run, do not write results to file.
     from_dir is the folder of csv files where the circulars are.
-    '''
+    """
     if from_scratch:
         redo_issuer( result_type, keep_list = keep_list, logging_dir = logging_dir )
     kwargs = dict( cutoff_list = cutoff_list, refcoord_list = refcoord_list, \
@@ -159,9 +183,9 @@ def extract_info( func_custom, \
 def set_extract_default( func_custom, result_type, \
                     logging_dir = None, cutoff_list = None, \
                     absdist_tuple = (-25.0, -25.0), from_dir = 'csv_raw' ):
-    '''
+    """
     Set default to extract_info
-    '''
+    """
     if logging_dir is None:
         logging_dir = 'logging_' + result_type
     if absdist_tuple is not None:
@@ -175,16 +199,16 @@ def set_extract_default( func_custom, result_type, \
     return partial_with_wrapper( extract_info, **kwargs )
 
 def create_default_dictargs( issuer = 'alberta_treasury' ):
-    '''
+    """
     Set default function arguments for issuer in dict.
-    '''
+    """
     return issuer, dict( keep_list = [ issuer ], from_scratch = False )
 
 def update_dictargs( list_of_dicts, master_dict, issuer = 'alberta_treasury' ):
-    '''
+    """
     Update master_dict. Append union of default_dict and elements of
     list_of_dicts to master_dict.
-    '''
+    """
     key, default_dict = create_default_dictargs( issuer = issuer )
     if master_dict.get( key, None ) is None:
         master_dict[ key ] = list()
@@ -194,9 +218,9 @@ def update_dictargs( list_of_dicts, master_dict, issuer = 'alberta_treasury' ):
     return master_dict
 
 def gen_dictargs( master_dict ):
-    '''
+    """
     Generate keywords arguments from master_dict.
-    '''
+    """
     for key in master_dict:
         for d in master_dict[ key ]:
             yield d
@@ -207,7 +231,7 @@ def sort_and_extract( refcoord_regex, extract_regex, \
                     delete_regex = None, \
                     start_regex = None, \
                     end_regex = None ):
-    '''
+    """
     Return two functions:
         sort_func to sort rows
         get_func to extract text in a named tuple
@@ -216,7 +240,7 @@ def sort_and_extract( refcoord_regex, extract_regex, \
     fp_regex is the compiled regex to remove the false positives.
     delete_regex, start_regex and end_regex are further arguments
     passed to get_pool_info, along with extract_regex (aka patterns).
-    '''
+    """
     kwargs = dict( refcoord_regex = refcoord_regex, fp_regex = fp_regex, idx_offset = idx_offset)
     sort_func = set_default_to_sort( **kwargs )
     kwargs = dict( patterns = extract_regex, delete_regex = delete_regex, \
@@ -229,14 +253,14 @@ def wrap_extract( get_func, \
                 result_type = 'rates', \
                 from_dir = 'csv_raw', \
                 logging_dir = None ):
-    '''
+    """
     Return two functions:
         custom_func only works on a single file.
         extract_func works on the directory assigned.
     get_func is the function extracting the text from sort_and_extract.
     cutoff_list, result_type and from_dir are function arguments to
     use with set_extract_default
-    '''
+    """
     custom_func = partial_with_wrapper( customize_func, get_data_func = get_func )
     extract_func = set_extract_default( func_custom = custom_func, \
                     cutoff_list = cutoff_list, result_type = result_type, \
