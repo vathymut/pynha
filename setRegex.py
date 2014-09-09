@@ -82,16 +82,6 @@ INSPRIV_TAG = re.compile(
                     """,
                     FLAGS_TO_USE )
 
-INSURERS_TAG = re.compile(
-                    r"""
-                    genworth                    # Match GENWORTH
-                    |
-                    aig.*?insurance             # Match AIG Insurance
-                    |
-                    canada.*?guaranty           # Match Canada Guaranty
-                    """,
-                    FLAGS_TO_USE )
-
 ID_INSURERS_TAG = re.compile(
                     r"""
                     composition.*?mortgage.*?pool   # Match Composition of Mortgage Pool
@@ -125,6 +115,9 @@ CANADAGUARANTY_TAG = re.compile(
                     canada.*?guaranty       # Match Canada Guaranty
                     """,
                     FLAGS_TO_USE )
+
+INSURERS_TAG = '\n|'.join( x.pattern for x in [ GENWORTH_TAG, AIG_TAG, CANADAGUARANTY_TAG ] )
+INSURERS_TAG = re.compile( INSURERS_TAG, FLAGS_TO_USE)
 
 CMHC_TAG = re.compile(
                     r"""
@@ -186,6 +179,12 @@ LOANS_TAG = re.compile(
                         pr.*?ts                 # Match prêts
                         """, FLAGS_TO_USE )
 
+# STILL TO DO: FRENCH
+SECURITIES_TAG = re.compile(
+                        r"""
+                        securities              # Match securities
+                        """, FLAGS_TO_USE )
+
 
 # Create REGEX to extract information
 RATE_FMT = re.compile(
@@ -203,7 +202,7 @@ DATE_FMT = re.compile(
                     r"""
                     [a-z ][a-z \.,]{1,14}?      # month, followed by spaces, ',' and '.' (OPTIONAL)
                     [\di]+?                     # day, digits - also accept 'I'
-                    [stndr\., ]*?               # 1st, 2nd, 3rd, ',' or '.' (OPTIONAL)
+                    [stndhr\., ]*?              # 1st, 2nd, 3rd, 28th, ',' or '.' (OPTIONAL)
                     [12][\d ]{3,4}              # the year (4 digits)
                     |                           # NOW THE FRENCH REGEX
                     \d{1,2}                     # day, digits
