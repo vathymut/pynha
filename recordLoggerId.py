@@ -82,9 +82,9 @@ def write_summ_loggers_to_csv( summ_list, result_type = 'rates', summ_dir = 'sum
 
 @contextmanager
 def log_exceptions( dir_to_log, content, logging_dir, test_run = True ):
-    '''
+    """
     Log exceptions when trying to extract .csv info.
-    '''
+    """
     try:
         yield
         if not test_run: # Log success
@@ -94,9 +94,9 @@ def log_exceptions( dir_to_log, content, logging_dir, test_run = True ):
         write_failures_to_log( dir_to_log, content, logging_dir = logging_dir )
 
 def delete_log_files( pattern_str, default_start_walk = 'logging_rates' ):
-    '''
+    """
     Delete files if the pattern pattern_str matches the filename.
-    '''
+    """
     args = default_start_walk.split()
     start_dir = join( HOMEDIR, *args )
     for dirpath, _, filenames in walk( start_dir ):

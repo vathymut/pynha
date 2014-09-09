@@ -49,11 +49,11 @@ def pdf_to_csv(
     keep_issuers = ISSUER_DIRS,
     pages_to_parse = PAGES_TO_PARSE_FIRSTPAGE
     ):
-    '''
+    """
     Convert pdf files in pdf_dir to csv for the pages in pages_to_parse.
     Converted csv files are saved in csv_dir.
     Convert only files belonging to issuers in keep_issuers.
-    '''
+    """
     HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
     chdir( pdf_dir )
     failed_files = []

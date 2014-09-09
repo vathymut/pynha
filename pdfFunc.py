@@ -18,10 +18,10 @@ from pdfminer.converter import PDFPageAggregator
 from itertools import chain
 
 def with_pdf( pdf_path, pdf_pwd = '' ):
-	'''
+	"""
 	Open the pdf document; the file is not password-protected.
 	If it is, pdf_pwd is the password. Return the pdfminer doc.
-	'''
+	"""
 	fp = open( pdf_path, 'rb' )
 	# create a parser object associated with the file object
 	parser = PDFParser( fp )
@@ -34,11 +34,11 @@ def with_pdf( pdf_path, pdf_pwd = '' ):
 		return doc
 
 def get_pages( pdf_doc, pages_to_parse = None ):
-    '''
+    """
     Only parse the pdf pages in pages_to_parse.
 	If pages_to_parse is None, get all the pages.
     pages_to_parse should be a tuple.
-    '''
+    """
     for page_no, page in enumerate( PDFPage.create_pages( pdf_doc ) ):
         if pages_to_parse is None:
             yield page_no, page
@@ -49,10 +49,10 @@ def get_pages( pdf_doc, pages_to_parse = None ):
                 continue
 
 def set_up_interpreter( ):
-	'''
+	"""
 	Set up pdf interpreter and device to extract layout of pages.
 	Simply takes care of overhead.
-	'''
+	"""
 	rsrcmgr = PDFResourceManager( )
 	# Set parameters for analysis.
 	laparams = LAParams()
@@ -61,9 +61,9 @@ def set_up_interpreter( ):
 	return device, interpreter
 
 def get_pdf_layout( pdf_page ):
-    '''
+    """
     Return the layout of the pdf page. Takes care of overhead.
-    '''
+    """
     device, interpreter = set_up_interpreter( )
     interpreter.process_page( pdf_page )
     layout = device.get_result( )
@@ -84,10 +84,10 @@ def to_bytestring( s, enc='ascii', error='replace' ):
         return 'No text'
 
 def process_lt_obj( layout ):
-	'''
+	"""
 	Process each lt_obj.
 	Return tuple (obj_no, bbox_coordinates, text) to be written to csv.
-	'''
+	"""
 	for obj_no, obj in enumerate( layout ):
 		result_list = []
 		result_list.append( obj_no )
@@ -96,10 +96,10 @@ def process_lt_obj( layout ):
 		yield result_list
 
 def process_text( obj ):
-	'''
+	"""
 	Extract the text from the pdf object.
 	If obj has no text, return the empty string.
-	'''
+	"""
 	try:
 		unicode_text = obj.get_text( )
 		return to_bytestring( unicode_text )
@@ -109,10 +109,10 @@ def process_text( obj ):
 		return empty_string
 
 def generate_rows( pdf_doc, pages_to_parse ):
-	'''
+	"""
 	Return tuples ( page_no, obj_no, bbox_coordinates, text )
 	to be written to csv for all pages in pages_to_parse.
-	'''
+	"""
 	for page_no, page in get_pages( pdf_doc, pages_to_parse ):
 		layout = get_pdf_layout( page )
 		for csv_row_list in process_lt_obj( layout ):
@@ -120,10 +120,10 @@ def generate_rows( pdf_doc, pages_to_parse ):
 			yield csv_row_list
 
 def gen_rows_frompath( from_pdf_path, pages_to_parse ):
-	'''
+	"""
 	Convenient wrapper around generate_rows.
 	It takes the path as opposed to the pdf document.
-	'''
+	"""
 	pdfminer_doc = with_pdf( from_pdf_path )
 	for csv_row_list in generate_rows( pdfminer_doc, pages_to_parse ):
 		yield csv_row_list

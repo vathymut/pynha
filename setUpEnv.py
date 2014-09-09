@@ -12,13 +12,13 @@ from recordLoggerId import log_exceptions, write_successes_to_csv, create_log_fo
                         get_stats_from_loggers, write_summ_loggers_to_csv, delete_log_files
 
 def gen_cutoff( func_custom, cutoff_list = None ):
-    '''
+    """
     Yields function func_custom with default argument
     cutoff_tuple from elements in cutoff_list.
     func_custom can be:
         custom_rate_p1, custom_mtgtotno, custom_date_issue
         custom_date_due, custom_date_interest, etc
-    '''
+    """
     if cutoff_list is not None:
         for cutoff in cutoff_list:
             func_with_cutoff = func_custom( cutoff_tuple = cutoff )
@@ -28,11 +28,11 @@ def gen_cutoff( func_custom, cutoff_list = None ):
         yield func_with_cutoff
 
 def gen_refcoord( func_with_cutoff, refcoord_list = None ):
-    '''
+    """
     Yields function func_with_cutoff with default argument
     tuple_coord from elements in refcoord_list
     func_with_cutoff might come from gen_cutoff.
-    '''
+    """
     if refcoord_list is not None:
         for refcoord in refcoord_list:
             func_with_ref = partial_with_wrapper( func_with_cutoff, tuple_coord = refcoord )
@@ -42,44 +42,44 @@ def gen_refcoord( func_with_cutoff, refcoord_list = None ):
         yield func_with_ref
 
 def gen_refcoord_and_cutoff( func_custom, cutoff_list = None, refcoord_list = None ):
-    '''
+    """
 	Customize the function func_custom to get the data.
 	refcoord_list are the (x0, y0) reference coordinates to find the info on the page.
 	cutoff_list are the maximum (x0, y0) differences to the reference coordinate.
-    '''
+    """
     for f_cut in gen_cutoff( func_custom, cutoff_list):
         for f_ref in gen_refcoord( f_cut, refcoord_list ):
             yield f_ref
 
 def gen_func_with_args( gen_func, partial_get_files, logging_dir ):
-	'''
+	"""
 	Generates the function arguments to be passed along with the customized function.
 	partial_get_files generates the files to be processed.
 	gen_func generates the customized functions to be called.
 	logging_dir is the directory where outcomes are logged.
-	'''
+	"""
 	for func in gen_func:
 		delete_log_files( pattern_str = 'failure.txt', default_start_walk = logging_dir )
 		for _, csv_filename, issuer in partial_get_files():
 			yield csv_filename, issuer, func
 
 def set_gen_extract_data( func_custom, cutoff_list = None, refcoord_list = None ):
-    '''
+    """
     Set appropriate defaults to func_custom.
     Return generator consisting of func_custom with different arguments.
-    '''
+    """
     args_dict = dict( func_custom = func_custom, refcoord_list = refcoord_list, cutoff_list = cutoff_list )
     return gen_refcoord_and_cutoff( **args_dict )
 
 def set_gen_func_with_args( gen_func, logging_dir, gen_get_files ):
-    '''
+    """
     Set appropriate defaults to func_custom.
     Return generator consisting of:
         csv_filename, filename to process
         issuer (self-explanatory)
         func, function to apply to csv file to extract info.
     This wraps set_gen_extract_data and set_get_files together.
-    '''
+    """
     args_dict = dict( gen_func = gen_func, partial_get_files = gen_get_files, logging_dir = logging_dir )
     return gen_func_with_args( **args_dict )
 
@@ -90,9 +90,9 @@ def wrap_set_up_env( func_custom, \
                     logging_dir = 'logging_rates', \
                     keep_list = None, \
                     from_dir = 'csv_raw' ):
-    '''
+    """
     Takes care of overhead in setting up all the relevant functions.
-    '''
+    """
     create_log_folders( results_folder = result_type, logging_dir = logging_dir, debug_print = False )
     # Create log_outcomes
     log_outcomes = partial_with_wrapper( log_exceptions, logging_dir = logging_dir )
@@ -110,10 +110,10 @@ def wrap_set_up_env( func_custom, \
 
 @contextmanager
 def handle_newline_error( ):
-    '''
+    """
     Handle exception err with message: 'newline inside string'
     This supposedly catches corrupt Scotia csv files.
-    '''
+    """
     try:
         yield
     except ( Exception, ) as err:
@@ -131,12 +131,12 @@ def process_csv_files( set_up_env, \
                     logging_dir = 'logging_rates', \
                     absdist_tuple = None, \
                     test_run = True ):
-    '''
+    """
     Process csv files and return csv files not processed.
     Assumes that wrap_set_up_env( ... ) has alreeady been called.
     Otherwise, log_outcomes, write_info, set_up_env don't exist.
     If test_run, do not write results to file.
-    '''
+    """
     HEADERS_CSV = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
     for csv_filename, issuer, extract_data in set_up_env:
         kwargs = dict( filename = csv_filename, headers = HEADERS_CSV, skip_rows_no = skip_rows_no, stop_row_no = stop_row_no )
