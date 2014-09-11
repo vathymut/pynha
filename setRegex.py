@@ -170,6 +170,8 @@ MTGDESCRIPTION_TAG = re.compile(
                         description.*?mortgage      # Match Description of Mortgage(s) Loans
                         |
                         description.*?cr.*ance     # Match Description des Créance(s)
+                        |
+                        description.*?pr.*?ts
                         """, FLAGS_TO_USE )
 
 LOANS_TAG = re.compile(
