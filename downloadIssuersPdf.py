@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-@author: Vathy M. Kamulete
 
+@author: Vathy M. Kamulete
 """
+
 from ioFunc import create_issuer_dir, check_if_dir_to_visit, goto_pdf_dir
 import ioFunc
 from urlparse import urljoin, urlsplit

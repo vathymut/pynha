@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 13 08:34:30 2013
 
 @author: Vathy M. Kamulete
 """

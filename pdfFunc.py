@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 13 08:34:30 2013
 
 @author: Vathy M. Kamulete
 """
@@ -26,9 +25,7 @@ def with_pdf( pdf_path, pdf_pwd = '' ):
 	# create a parser object associated with the file object
 	parser = PDFParser( fp )
 	# create a PDFDocument object that stores the document structure
-	doc = PDFDocument( parser )
-	# supply the password for initialization
-	doc.initialize( pdf_pwd )
+	doc = PDFDocument( parser, pdf_pwd )
 	# check that doc is extractable
 	if doc.is_extractable:
 		return doc

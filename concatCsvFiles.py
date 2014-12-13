@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 13 08:34:30 2013
 
 @author: Vathy M. Kamulete
 """
+
 from os import walk
 from os.path import dirname, join, abspath, basename
 from stdDataFunc import partial_with_wrapper
