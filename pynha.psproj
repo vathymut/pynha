@@ -63,18 +63,14 @@ FileName=$[Project-Path]stdDataFunc.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node13]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]testLoggerConfig.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node14]
-ClassName=TProjectFileNode
 FileName=$[Project-Path]testSingleFile.py
 
-[Project\ChildNodes\Node0\ChildNodes\Node15]
+[Project\ChildNodes\Node0\ChildNodes\Node14]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]testSingleFunc.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=16
+Count=15
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

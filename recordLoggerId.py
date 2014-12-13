@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-@author: Vathy
+
+@author: Vathy M. Kamulete
 """
 
 from __future__ import division

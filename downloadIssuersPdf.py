@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-
+@purpose: Download the pdf files for the NHA-MBS circulars.
 @author: Vathy M. Kamulete
 """
 
@@ -73,7 +73,7 @@ def get_filename_and_url( filenames ):
 		for url in get_links_from_file( filename ):
 			 yield ( filename, url )
 
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
+# Set home Directory
 MAINDIR = dirname( dirname( abspath( __file__ ) ) )
 HOMEDIR = join( MAINDIR, 'pynha_scraper' )
 ioFunc.HOMEDIR  = HOMEDIR
