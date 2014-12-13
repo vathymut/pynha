@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 13 08:34:30 2013
 
 @author: Vathy M. Kamulete
 """
+
 from os import getcwd, listdir, chdir, mkdir, makedirs, remove
 from os.path import splitext, exists, dirname, basename, join, isdir, abspath
 from glob import glob
 import contextlib
 import csv
 from time import sleep
+
+# Set root directory
+ROOTDIR = dirname( dirname( abspath( __file__ ) ) )
 
 def safe_delete( path ):
     """
@@ -27,8 +30,8 @@ def safe_delete( path ):
 def create_dir( d ):
 	"""
 	Create directory d if it does not exist already.
-	Taken from StackOverflow:
-	http://stackoverflow.com/q/273192/1965432
+	Adapted from StackOverflow:
+	   http://stackoverflow.com/q/273192/1965432
 	"""
 	if not exists( d ):
 		makedirs( d )
@@ -58,6 +61,7 @@ def create_issuer_dir( filename, prefix_path = 'pdf_downloaded' , debug_print = 
 	Return the existing or newly created directory for the issuer.
 	"""
 	issuer, _ = splitext( filename )
+    # HOMEDIR is a global variable (set elsewhere)
 	new_issuer_dir = join( HOMEDIR, prefix_path, issuer )
 	is_created = create_dir( new_issuer_dir )
 	if debug_print:
@@ -74,8 +78,8 @@ def gen_issuer_names( skip_list = None ):
 	"""
     CURRDIR = getcwd( )
     try:
-        # CHANGE THIS TO RELATIVE PATH
-        chdir( r'B:\pynha_scraper' ) # Careful: It's hardcoded
+        scraper_dir = join( ROOTDIR, 'pynha_scraper' )
+        chdir( scraper_dir )
         issuers_filenames = glob( '*.txt' )
         for filename in issuers_filenames:
 			issuer, _ = splitext( filename )
@@ -103,13 +107,13 @@ def navigate_dirs( home_dir ):
 			yield dirname
 
 def check_if_dir_to_visit( dir, dirs_to_visit  ):
-	"""
-	Check if the dir is in tuples of dirs_to_visit
-	"""
-	short_dirname = basename( dir )
-	if short_dirname in dirs_to_visit:
+    """
+    Check if the dir is in tuples of dirs_to_visit
+    """
+    short_dirname = basename( dir )
+    if short_dirname in dirs_to_visit:
 		return True
-	return False
+    return False
 
 def check_if_csvexists( csv_filename, in_dir, debug_print = True ):
 	"""
@@ -139,6 +143,7 @@ def get_dir_and_fileinfo( from_dir, to_dir, first_ten = False ):
 	first_ten takes the first 10 files from each issuer.
     """
     for dirname in navigate_dirs( home_dir = from_dir ):
+        # HOMEDIR is a global variable (set elsewhere)
 		in_dir = join( HOMEDIR, to_dir, dirname )
 		with goto_pdf_dir( save_dir = dirname, home_dir = from_dir, debug_print = first_ten ):
 			if first_ten:
@@ -181,6 +186,7 @@ def read_as_set( dir_to_log, filename = 'success.txt', logging_dir = 'logging_ra
     """
     Read contents of file into a set.
     """
+    # HOMEDIR is a global variable (set elsewhere)
     filepath = join( HOMEDIR, logging_dir, dir_to_log, filename )
     try:
         with open( filepath, 'r' ) as f:
@@ -242,9 +248,9 @@ def get_files_to_process( to_dir, \
 	Wrapper around the function skip_dir and skip_files.
 	"""
     logging_dir = join( HOMEDIR, logging_dir )
-    # CHANGE THIS TO RELATIVE PATH
-    csvdir = join( r'B:\pynha_csv', from_dir ) # Careful: It's hardcoded
-    skip_dir_gen = skip_dir( to_dir = to_dir, from_dir = csvdir, keep_list = keep_list )
+    root_dir = join( ROOTDIR, 'pynha_csv' )
+    csv_dir = join( root_dir, from_dir )
+    skip_dir_gen = skip_dir( to_dir = to_dir, from_dir = csv_dir, keep_list = keep_list )
     skip_files_gen = skip_files( skip_dir_gen, logging_dir = logging_dir )
     for file_no, csv_filename, issuer in skip_files_gen:
 		yield file_no, csv_filename, issuer

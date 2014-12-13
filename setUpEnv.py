@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-@author: Vathy
+
+@author: Vathy M. Kamulete
 """
+
 from time import sleep
 from contextlib import contextmanager
 from ioFunc import gen_issuer_names, get_files_to_process
