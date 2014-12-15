@@ -18,6 +18,7 @@ def gen_csv_and_issuer( result_dir = 'rates' ):
         'mtgtotno', 'date_due', 'date_issue',
         'date_int', 'rates', etc
     """
+    # HOMEDIR is a global variable (set elsewhere)
     start_dir = join( HOMEDIR, result_dir )
     for dirpath, _, filenames in walk( start_dir ):
         for f in filenames:
@@ -36,7 +37,7 @@ def set_keys_to_df( csv_filepath, issuer ):
 def concat_df( result_dir = 'rates' ):
     """
     Concatenate dataframes in result_dir folder
-    into a single master dataframe.
+    into a single dataframe.
     """
     df_list = list()
     for csv_filepath, issuer in gen_csv_and_issuer( result_dir = result_dir ):
@@ -46,7 +47,7 @@ def concat_df( result_dir = 'rates' ):
 
 def concat_df_from_list( dir_list ):
     """
-    Concatenate dataframes in each element of dir_list.
+    Return list of dataframes for each element in dir_list.
     """
     return map( concat_df, dir_list )
 
@@ -55,8 +56,8 @@ def merge_df_from_list( df_list, how = 'outer', left_index = True, \
     """
     Merge dataframes in df_list.
     """
-    args_dict = dict( how = how, left_index = left_index, right_index = right_index, sort = sort )
-    merge_func = partial_with_wrapper( pd.merge,  **args_dict  )
+    kwargs = dict( how = how, left_index = left_index, right_index = right_index, sort = sort )
+    merge_func = partial_with_wrapper( pd.merge, **kwargs )
     df = reduce( merge_func, df_list )
     return df.groupby( level = [ 'poolno', 'issuer' ] ).first( )
 

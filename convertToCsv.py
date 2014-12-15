@@ -15,6 +15,7 @@ from recordLoggerId import delete_csv_from_loggers, delete_log_files
 # Set global directories
 MAINDIR = dirname( dirname( abspath( __file__ ) ) )
 HOMEDIR = join( MAINDIR, 'pynha_csv' )
+# set HOMEDIR global in requisite modules
 ioFunc.HOMEDIR, recordLoggerId.HOMEDIR = HOMEDIR, HOMEDIR
 PDFDIR = join( MAINDIR, 'pynha_scraper', 'pdf_downloaded' )
 CSVDIR_RAW = join( HOMEDIR, 'csv_raw' )
@@ -24,19 +25,21 @@ CSVDIR_FIRSTPAGE = join( HOMEDIR, 'csv_firstpage' )
 create_issuer_subdirs( main_dir = 'csv_raw', debug_print = False )
 create_issuer_subdirs( main_dir = 'csv_firstpage', debug_print = False )
 
-## NUCLEAR OPTION TO DELETE ALL .CSV FILES IN in CSV_RAW. DO NOT USE ##
+## DELETE ALL .CSV IN in CSV_RAW and CSVDIR_FIRSTPAGE. DO NOT USE ##
 # delete_log_files( pattern_str = '.csv', default_start_walk = CSVDIR_RAW )
 # delete_log_files( pattern_str = '.csv', default_start_walk = CSVDIR_FIRSTPAGE )
 
+# Get Big Six Issuers
 BIGSIX = [ 'rbc', 'rbc_dominion', 'bmo', 'cibc', 'desjardins', 'national_bank', \
-			'national_bank_financial', 'scotia_bank', 'td_bank', 'td_securities' ]
+        'national_bank_financial', 'scotia_bank', 'td_bank', 'td_securities' ]
 
-# Delete csv files that failed to parse in ISSUER_DIRS
+# Get all issuers, including Big Six
 ISSUER_DIRS = list( gen_issuer_names( skip_list = None ) )
 
-# Delete specific csv files if they failed to parse
-##ISSUER_DIRS = [ 'desjardins', 'home_trust', 'national_bank', 'scotia_bank' ]
-##delete_csv_from_loggers( issuers_list = ISSUER_DIRS, logging_folder = 'logging_ppl_amount' )
+# Delete csv files not parsed properly (For debugging).
+## ISSUER_DIRS = [ 'desjardins', 'home_trust', 'national_bank', 'scotia_bank' ]
+## ioFunc.CSVDIR = CSVDIR_RAW # Or CSVDIR_FIRSTPAGE
+## delete_csv_from_loggers( issuers_list = ISSUER_DIRS, logging_folder = 'logging_ppl_amount' )
 
 # CSV info
 PAGES_TO_PARSE_FIRSTPAGE = ( 0, 1, 2, 3 )

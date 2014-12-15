@@ -147,13 +147,14 @@ def delete_csv_from_loggers( issuers_list, logging_folder = 'logging_rates' ):
     if the file is in the failure log.
     """
     CURRDIR = getcwd( )
-    # CSVDIR should be: B:\pynha_csv\csv_raw or B:\pynha_csv\csv_firstpage
     try:
         for logpath, issuer in gen_loggers_path( issuers_list, logging_folder ):
             chdir( logpath )
             if not exists( 'failure.txt' ):
                 continue
             for csvpath in gen_csvfailed_path( ):
+                # CSVDIR is a global variable (set elsewhere)
+                # CSVDIR is either: /pynha_csv/csv_raw or /pynha_csv/csv_firstpage
                 csv_fullpath = join( CSVDIR, issuer, csvpath )
                 safe_delete( csv_fullpath )
     finally:
@@ -163,8 +164,8 @@ def delete_csv_from_loggers( issuers_list, logging_folder = 'logging_rates' ):
 def count_lines( fname ):
     """
     Get a line count. If file doesn't exist, return 0.
-    From StackOverflow:
-    http://stackoverflow.com/q/845058/1965432
+    Adapted from StackOverflow:
+        http://stackoverflow.com/q/845058/1965432
     """
     if not exists( fname ):
         return 0

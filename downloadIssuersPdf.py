@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+
 @purpose: Download the pdf files for the NHA-MBS circulars.
 @author: Vathy M. Kamulete
 """
 
-from ioFunc import create_issuer_dir, check_if_dir_to_visit, goto_pdf_dir
-import ioFunc
+from ioFunc import create_issuer_dir, check_if_dir_to_visit, goto_pdf_dir, gen_issuer_names
+import ioFunc # Set the global variables in module later
 from urlparse import urljoin, urlsplit
 from urllib2 import urlopen, Request
 from time import sleep
@@ -80,16 +81,19 @@ ioFunc.HOMEDIR  = HOMEDIR
 # Website url
 BASEURL = 'http://www.cmhc-schl.gc.ca'
 
-# Get all files
+# Get all files in ~/pynha_scraper, including txt files with links
 chdir( HOMEDIR )
 all_filenames = listdir( HOMEDIR )
 
 # Keep all .txt files
-pattern = 'r*.txt'
+pattern = '*.txt'
 issuers_filenames = filter( all_filenames, pattern )
 
 if __name__ == '__main__':
-    ISSUER_DIRS = ( 'rbc', 'rbc_dominion' )
+    # Get all issuers, including Big Six
+    ISSUER_DIRS = list( gen_issuer_names( skip_list = None ) )
+    # If limiting to specific issuers, uncomment line below and set issuers
+    ## ISSUER_DIRS = ( 'rbc', 'rbc_dominion' )
     for filename, url in get_filename_and_url( issuers_filenames ):
 		new_issuer_dir = create_issuer_dir( filename, prefix_path = 'pdf_downloaded' )
 		if not check_if_dir_to_visit( new_issuer_dir, ISSUER_DIRS ):

@@ -9,9 +9,9 @@ from os.path import dirname, abspath, basename
 from os import chdir
 from setUpEnv import gen_refcoord_and_cutoff
 
-# Home Directory - On RZ machine: 'B:\\nha_mbs'
+# Home Directory: ~/
 HOMEDIR = dirname( dirname( abspath( __file__ ) ) )
-# pynha Directory - On RZ machine: 'B:\\nha_mbs\\pynha'
+# pynha Directory: ~/pynha
 PYNHADIR = dirname( abspath( __file__ ) )
 # csv headers
 HEADERS = [ 'page_no', 'obj_no', 'x0', 'y0', 'x1', 'y1', 'text' ]
