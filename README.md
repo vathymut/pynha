@@ -23,6 +23,8 @@ With Python 2.7, you need:
 - pandas >= 0.9.0
 - pdfminer >= 20140328
 
+The rest comes from the standard libraries (itertools, csv, collections, functools, etc). This is to minimize external dependencies.
+
 ## Usage
 
 To download NHA-MBS circulars (pdf) and save as files, run:
