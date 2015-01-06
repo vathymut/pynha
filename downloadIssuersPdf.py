@@ -12,7 +12,7 @@ from urllib2 import urlopen, Request
 from time import sleep
 import shutil
 import datetime
-from fnmatch import filter # Use glob.glob instead
+from glob import glob
 from os import chdir, listdir, getcwd
 from os.path import dirname, abspath, join, splitext, basename
 
@@ -78,16 +78,16 @@ def get_filename_and_url( filenames ):
 MAINDIR = dirname( dirname( abspath( __file__ ) ) )
 HOMEDIR = join( MAINDIR, 'pynha_scraper' )
 ioFunc.HOMEDIR  = HOMEDIR
+NHAMBSDIR = join( HOMEDIR, 'nhambs' )
 # Website url
 BASEURL = 'http://www.cmhc-schl.gc.ca'
 
 # Get all files in ~/pynha_scraper, including txt files with links
-chdir( HOMEDIR )
-all_filenames = listdir( HOMEDIR )
+chdir( NHAMBSDIR )
+all_filenames = listdir( NHAMBSDIR )
 
 # Keep all .txt files
-pattern = '*.txt'
-issuers_filenames = filter( all_filenames, pattern )
+issuers_filenames = glob( '*.txt' )
 
 if __name__ == '__main__':
     # Get all issuers, including Big Six
