@@ -98,7 +98,7 @@ if __name__ == '__main__':
 		new_issuer_dir = create_issuer_dir( filename, prefix_path = 'pdf_downloaded' )
 		if not check_if_dir_to_visit( new_issuer_dir, ISSUER_DIRS ):
 			continue
-		with goto_pdf_dir( new_issuer_dir, HOMEDIR ):
+		with goto_pdf_dir( new_issuer_dir, NHAMBSDIR ):
 			url = url.rstrip()
 			abs_link = urljoin( BASEURL, url = url )
 			pdf_filename = give_filename( url_rel = url )
