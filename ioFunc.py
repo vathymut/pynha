@@ -78,7 +78,7 @@ def gen_issuer_names( skip_list = None ):
 	"""
     CURRDIR = getcwd( )
     try:
-        scraper_dir = join( ROOTDIR, 'pynha_scraper' )
+        scraper_dir = join( ROOTDIR, 'pynha_scraper', 'nhambs' )
         chdir( scraper_dir )
         issuers_filenames = glob( '*.txt' )
         for filename in issuers_filenames:
