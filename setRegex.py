@@ -121,7 +121,7 @@ INSURERS_TAG = re.compile( INSURERS_TAG, FLAGS_TO_USE)
 
 CMHC_TAG = re.compile(
                     r"""
-                    canada.*?mortgage.*?housing.*?corp
+                    canad.*?mortgage.*?housing.*?corp
                     |
                     cmhc
                     |
