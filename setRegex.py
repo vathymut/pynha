@@ -100,6 +100,8 @@ GENWORTH_TAG = re.compile(
                     r"""
                     genworth                # Match GENWORTH
                     |
+                    genwortn                # Matches mangled version of GENWORTH
+                    |
                     ge.*?capital.*?mort     # Match GE CAPITAL MORTGAGE
                     """,
                     FLAGS_TO_USE )
@@ -123,7 +125,13 @@ CMHC_TAG = re.compile(
                     r"""
                     canad.*?mortgage.*?housing.*?corp
                     |
+                    canad.*?housing.*?mortgage.*?corp
+                    |
                     cmhc
+                    |
+                    cmwc                    # Sometimes CMHC shows up as CMWC
+                    |
+                    civfhc                  # Matches mangled version of CMHC
                     |
                     Soci.*?t.*?canadienne.*?hypoth.*?que.*?logement
                     """,
