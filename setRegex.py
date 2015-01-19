@@ -134,6 +134,8 @@ CMHC_TAG = re.compile(
                     civfhc                  # Matches mangled version of CMHC
                     |
                     Soci.*?t.*?canadienne.*?hypoth.*?que.*?logement
+                    |
+                    schl
                     """,
                     FLAGS_TO_USE )
 
