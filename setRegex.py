@@ -206,7 +206,7 @@ RATE_FMT = re.compile(
                     [\.,]       # '.' or ','
                     \d{1,5}     # digits after decimal point
                     \s*?        # spaces (OPTIONAL)
-                    %           # pct sign
+                    %?          # pct sign
                     """,
                     FLAGS_TO_USE )
 
