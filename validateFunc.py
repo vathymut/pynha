@@ -91,7 +91,7 @@ def validate_amount( result_list, \
     if any( is_num ) and all( is_not_ltr ):
         return result_list
     print 'Result list:\n', result_list
-    error_print = "The amounts in the list do not well-formatted."
+    error_print = "The amounts in the list are not formatted as they should be."
     raise ValueError( error_print )
 
 def validate_blanks( result_list, \
